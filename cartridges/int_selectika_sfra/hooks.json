@@ -1,0 +1,7 @@
+{
+    "hooks": [{
+            "name": "app.template.htmlHead",
+            "script": "~/cartridge/scripts/hook/head"
+        }
+    ]
+}

@@ -1,0 +1,266 @@
+{
+    "step-types": {
+        "script-module-step": [{
+            "@type-id": "custom.Selectika.FtpUpload",
+            "description": "Upload files to an (S)FTP server",
+            "module": "int_selectika_core/cartridge/scripts/job/ftpUpload.js",
+            "function": "Upload",
+            "parameters": {
+                "parameters": [{
+                        "@name": "ServiceID",
+                        "@type": "string",
+                        "@required": "true",
+                        "@trim": "true",
+                        "default-value": "selectika.ftp"
+                    },
+                    {
+                        "@name": "FilePattern",
+                        "@type": "string",
+                        "@required": "false",
+                        "description": "File pattern (Regular Expression)",
+                        "@trim": "true",
+                        "default-value": ".*\\.csv"
+                    },
+                    {
+                        "@name": "SourceFolder",
+                        "@type": "string",
+                        "@required": "true",
+                        "@trim": "true",
+                        "description": "Local folder with files, relative to IMPEX/",
+                        "default-value": "src/selectika/feed"
+                    },
+                    {
+                        "@name": "TargetFolder",
+                        "@type": "string",
+                        "@required": "true",
+                        "description": "Remote folder on Server, relative to home directory",
+                        "@trim": "true"
+                    },
+                    {
+                        "@name": "ArchiveFolder",
+                        "@type": "string",
+                        "@required": "false",
+                        "description": "Local folder where to archive files, relative to IMPEX/",
+                        "@trim": "true",
+                        "default-value": "src/archive/selectika"
+                    }
+                ]
+            },
+            "status-codes": {
+                "status": [{
+                        "@code": "ERROR",
+                        "description": "Used when an error occurred."
+                    },
+                    {
+                        "@code": "OK",
+                        "description": "Used when everything went well."
+                    }
+                ]
+            }
+        }],
+        "chunk-script-module-step": [{
+            "@type-id": "custom.Selectika.ProductExportCSV",
+            "description": "Export Selectika Product Feed",
+            "@supports-site-context": "true",
+            "@supports-organization-context": "false",
+            "@supports-parallel-execution": "false",
+            "module": "int_selectika_core/cartridge/scripts/job/productExportCsv.js",
+            "before-step-function": "beforeStep",
+            "total-count-function": "getTotalCount",
+            "read-function": "read",
+            "process-function": "process",
+            "write-function": "write",
+            "after-step-function": "afterStep",
+            "chunk-size": 1000,
+            "parameters": {
+                "parameters": [{
+                        "@name": "TargetFolder",
+                        "@type": "string",
+                        "@required": "true",
+                        "@trim": "true",
+                        "description": "Target folder path (in IMPEX)",
+                        "default-value": "src/selectika/feed"
+                    },
+                    {
+                        "@name": "ProductTypeStrategy",
+                        "@type": "string",
+                        "@required": "true",
+                        "@trim": "false",
+                        "description": "Product Type obtaining Method.",
+                        "enum-values": {
+                            "value": [
+                                "Category",
+                                "Custom Field"
+                            ]
+                        }
+                    },
+                    {
+                        "@name": "ProductTypeCategoryDepth",
+                        "@type": "long",
+                        "@required": "false",
+                        "@trim": "false",
+                        "description": "Product Type category depth."
+                    },
+                    {
+                        "@name": "ProductTypeField",
+                        "@type": "string",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "Product Type field."
+                    },
+
+                    {
+                        "@name": "GenderStrategy",
+                        "@type": "string",
+                        "@required": "true",
+                        "@trim": "false",
+                        "description": "Gender obtaining Method.",
+                        "enum-values": {
+                            "value": [
+                                "Category",
+                                "Custom Field"
+                            ]
+                        }
+                    },
+                    {
+                        "@name": "GenderCategoryDepth",
+                        "@type": "long",
+                        "@required": "false",
+                        "@trim": "false",
+                        "description": "Gender category depth."
+                    },
+                    {
+                        "@name": "GenderField",
+                        "@type": "string",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "Gender field."
+                    },
+                    {
+                        "@name": "ImageType",
+                        "@type": "string",
+                        "@required": "true",
+                        "@trim": "true",
+                        "description": "Image type (small, large)."
+                    },
+                    {
+                        "@name": "ParentProductStrategy",
+                        "@type": "string",
+                        "@required": "true",
+                        "@trim": "true",
+                        "description": "How to get parent product.",
+                        "enum-values": {
+                            "value": [
+                                "ID Section",
+                                "Master Product"
+                            ]
+                        }
+                    },
+                    {
+                        "@name": "ParentProductIdSectionStart",
+                        "@type": "long",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "ID section start"
+                    },
+                    {
+                        "@name": "ParentProductIdSectionEnd",
+                        "@type": "long",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "ID section end"
+                    },
+                    {
+                        "@name": "ColorStrategy",
+                        "@type": "string",
+                        "@required": "true",
+                        "@trim": "true",
+                        "description": "How to get color.",
+                        "enum-values": {
+                            "value": [
+                                "ID Section",
+                                "Variation Attribute Value"
+                            ]
+                        }
+                    },
+                    {
+                        "@name": "ColorIdSectionStart",
+                        "@type": "long",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "Color section start"
+                    },
+                    {
+                        "@name": "ColorIdSectionEnd",
+                        "@type": "long",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "Color section end"
+                    },
+                    {
+                        "@name": "ColorVariationAttributeName",
+                        "@type": "string",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "Color attribute name",
+                        "default-value": "color"
+                    },
+                    {
+                        "@name": "SizeStrategy",
+                        "@type": "string",
+                        "@required": "true",
+                        "@trim": "true",
+                        "description": "How to get size.",
+                        "enum-values": {
+                            "value": [
+                                "ID Section",
+                                "Variation Attribute Value"
+                            ]
+                        }
+                    },
+                    {
+                        "@name": "SizeIdSectionStart",
+                        "@type": "long",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "Size section start"
+                    },
+                    {
+                        "@name": "SizeIdSectionEnd",
+                        "@type": "long",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "Size section end"
+                    },
+                    {
+                        "@name": "SizeVariationAttributeName",
+                        "@type": "string",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "Size attribute name",
+                        "default-value": "size"
+                    },
+                    {
+                        "@name": "BrandField",
+                        "@type": "string",
+                        "@required": "false",
+                        "@trim": "true",
+                        "description": "Brand field name",
+                        "default-value": "brand"
+                    }               
+                ]
+            },
+            "status-codes": {
+                "status": [{
+                        "@code": "ERROR",
+                        "description": "An error occurred."
+                    },
+                    {
+                        "@code": "OK",
+                        "description": "Successful execution."
+                    }
+                ]
+            }
+        }]
+    }
+}

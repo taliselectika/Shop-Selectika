@@ -1,0 +1,1 @@
+<selectika-sbi retailer="${pdict.merchantId}" item="${pdict.productId}" lang="${pdict.lang}"></selectika-sbi>

@@ -1,0 +1,1 @@
+<isinclude url="${URLUtils.url('Selectika-Recommendations', 'productID', pdict.product.id)}" sf-toolkit="on" />
